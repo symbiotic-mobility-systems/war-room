@@ -249,6 +249,21 @@
     .btn.ghost{background:rgba(255,255,255,0.06); color:#fff; border-color:rgba(255,255,255,0.25);}
     .btn.ghost:hover{border-color:var(--machine); color:var(--machine);}
 
+    /* ===== STANFORD TAB ===== */
+    .flow.cols5{grid-template-columns:repeat(5,1fr);}
+    .flow div em{font-family:var(--mono); font-style:normal; font-size:9.5px; letter-spacing:.08em; color:var(--machine2); text-transform:uppercase; display:block; margin-bottom:2px;}
+    .checklist{display:grid; grid-template-columns:repeat(5,1fr); gap:12px; margin-top:16px;}
+    .check{border:0.5px solid var(--border); border-radius:var(--radius-lg); background:var(--bg2); padding:16px 18px; transition:border-color .18s, transform .18s;}
+    .check:hover{border-color:var(--border2); transform:translateY(-1px);}
+    .check h4{margin:0 0 8px; font-family:var(--display); font-size:12.5px; font-weight:600; letter-spacing:.02em;}
+    .check h4::before{content:'☐ '; font-family:var(--mono); color:var(--pulse2);}
+    .check ul{margin:0 0 0 2px; padding:0; list-style:none; font-size:12px; line-height:1.8; color:var(--muted);}
+    .check li::before{content:'· '; color:var(--dim);}
+    .check strong{color:var(--text); font-weight:600;}
+    @media (max-width:1100px){ .checklist{grid-template-columns:repeat(3,1fr);} .flow.cols5{grid-template-columns:repeat(3,1fr);} }
+    @media (max-width:640px){ .checklist{grid-template-columns:1fr 1fr;} .flow.cols5{grid-template-columns:1fr 1fr;} }
+    @media (max-width:460px){ .checklist,.flow.cols5{grid-template-columns:1fr;} }
+
     .colophon{max-width:1200px; margin:40px auto 0; padding:0 48px; font-family:var(--mono); font-size:10px; letter-spacing:.08em; color:var(--dim); line-height:1.9;}
 
     @media (prefers-reduced-motion:reduce){
@@ -310,6 +325,7 @@
   <button class="tab" role="tab" aria-selected="false" data-tab="warroom"><span class="num">02</span>12-MONTH WAR ROOM</button>
   <button class="tab" role="tab" aria-selected="false" data-tab="machine"><span class="num">03</span>THE MACHINE</button>
   <button class="tab" role="tab" aria-selected="false" data-tab="join"><span class="num">04</span>JOIN THE WAR ROOM</button>
+  <button class="tab" role="tab" aria-selected="false" data-tab="stanford"><span class="num">05</span>STANFORD · DCI → PHD</button>
 </nav>
 
 <!-- ============ TAB 01 · DOCTRINE ============ -->
@@ -559,6 +575,122 @@
     ALL DATA IS COLLECTED WITH INFORMED CONSENT AND HANDLED UNDER APPLICABLE HEALTH-PRIVACY LAW.
     WE DO NOT PROMISE A CURE. WE PROMISE TOTAL, MEASURED, RELENTLESS EFFORT.
   </div>
+</section>
+
+<!-- ============ TAB 05 · STANFORD · DCI → PHD ============ -->
+<section class="tab-panel" id="panel-stanford" role="tabpanel">
+  <div class="mission"><strong>Founder's rule: the mission is not "learn AI" or "start a company." It is to become the world's leading engineer of Human Digital Twins for severe neurological disability.</strong></div>
+
+  <section class="sec">
+    <div class="kicker">THE LONG GAME · FOUNDER'S ACADEMY</div>
+    <h3>STANFORD DCI 2027 → EXECUTE → PHD → INSTITUTE</h3>
+    <p class="lead">
+      The 12-month war room is Year 1. The decade belongs to Stanford. In <strong>September 2027</strong>, the founder
+      enters the <strong>Stanford Distinguished Careers Institute (DCI)</strong> — a 12-month, on-campus fellowship where
+      accomplished professionals enroll as non-matriculating graduate students, take graduate courses across every school,
+      work with faculty mentors, and build a custom "purpose pathway." Ours is built around one question:
+    </p>
+    <div class="quote" style="margin-top:0;">
+      "<strong>How do we maximize human capability when biology reaches its limits?</strong>"
+      — a question that spans nearly every school at Stanford, and the exact question Patient Zero's campaign will have
+      spent a year answering in practice.
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="kicker">THE PURPOSE PATHWAY · FIVE COMMUNITIES</div>
+    <h3>A HYBRID PATHWAY ACROSS THE UNIVERSITY</h3>
+    <p class="lead">DCI offers standard pathways like Engineering Sciences &amp; Design or Health &amp; Healthcare. We deliberately build a hybrid that crosses departments — because the Human Digital Twin sits exactly at the intersection of engineering, medicine, and entrepreneurship.</p>
+    <div class="flow cols5">
+      <div><em>School of Engineering</em><strong>AI · Robotics · Vision</strong>Artificial intelligence, computer vision, human-centered AI, distributed systems.</div>
+      <div><em>School of Medicine</em><strong>Neuro · Rehab · Informatics</strong>Neurology, rehabilitation medicine, swallowing disorders, biomedical informatics, clinical AI.</div>
+      <div><em>Stanford HAI</em><strong>The Case Study</strong>The startup becomes a live case study in AI agents, foundation models, multimodal AI, and human-AI collaboration.</div>
+      <div><em>Stanford Biodesign</em><strong>The Home Community</strong>The single most valuable network — engineering × medicine × entrepreneurship is Biodesign's entire premise.</div>
+      <div><em>Stanford Robotics</em><strong>The Extension</strong>Not because humanoids are fashionable — because robotics is where the Digital Twin eventually grows a body.</div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="kicker">EXIT CRITERIA · BEFORE LEAVING CAMPUS</div>
+    <h3>THE DCI YEAR IS SCORED LIKE EVERYTHING ELSE</h3>
+    <p class="lead">Twelve months at Stanford ends with a checklist, not a feeling. Nothing below is optional.</p>
+    <div class="checklist">
+      <div class="check">
+        <h4>BIOLOGY</h4>
+        <ul>
+          <li>Complete digital medical record</li>
+          <li>3D body model</li>
+          <li>Motion database</li>
+          <li>Swallowing database</li>
+          <li>Therapy database</li>
+        </ul>
+      </div>
+      <div class="check">
+        <h4>AI · ATHENA</h4>
+        <ul>
+          <li><strong>Athena v1</strong> — the Twin, hardened</li>
+          <li><strong>Athena v2</strong> — predictive, multimodal</li>
+          <li><strong>Athena Clinical</strong> — clinician-facing</li>
+        </ul>
+      </div>
+      <div class="check">
+        <h4>RESEARCH</h4>
+        <ul>
+          <li>3–5 workshop papers</li>
+          <li>1 conference paper</li>
+          <li>1 journal paper</li>
+          <li>Early-stage is acceptable; silence is not</li>
+        </ul>
+      </div>
+      <div class="check">
+        <h4>RECRUITING</h4>
+        <ul>
+          <li>Neurologist</li>
+          <li>Rehabilitation physician</li>
+          <li>Speech-language pathologist</li>
+          <li>Orthopedic surgeon</li>
+          <li>AI researcher · roboticist</li>
+          <li>One Stanford student founder</li>
+        </ul>
+      </div>
+      <div class="check">
+        <h4>SILICON VALLEY</h4>
+        <ul>
+          <li>NVIDIA · Google DeepMind · OpenAI</li>
+          <li>Figure AI · 1X · Dexterity</li>
+          <li>Neuralink · Intuitive Surgical · SRI</li>
+          <li><strong>Not to raise. To build relationships.</strong></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="kicker">THE DECADE ROADMAP</div>
+    <h3>PATIENT ZERO → PHD → INSTITUTE</h3>
+    <p class="lead">
+      The PhD is deliberately <strong>not</strong> pursued immediately after DCI. We spend 2–3 more years executing —
+      accumulating patients, publications, datasets, prototypes, and clinical collaborators — so that when the Stanford PhD
+      application lands, it is not a request for training. <strong>It is a portfolio.</strong>
+    </p>
+    <div class="ladder">
+      <div class="rung now"><span class="ph">STEP 1</span><span class="name">PATIENT ZERO</span><span class="when">2026–27 · WAR ROOM</span><span class="desc">The 12-month campaign. One body pushed to its biological limit; every result digitized.</span></div>
+      <div class="rung now"><span class="ph">STEP 2</span><span class="name">MEDICAL UNDERSTANDING</span><span class="when">2026–27</span><span class="desc">Fourteen specialties, one Codex. The founder learns the biology deeply enough to command both fronts.</span></div>
+      <div class="rung"><span class="ph">STEP 3</span><span class="name">DIGITAL TWIN</span><span class="when">2027 · DCI YEAR</span><span class="desc">Athena v1 → v2 at Stanford, inside HAI and Biodesign, with faculty mentors on both fronts.</span></div>
+      <div class="rung"><span class="ph">STEP 4</span><span class="name">CLINICAL AI</span><span class="when">2028</span><span class="desc">Athena Clinical deployed with real clinicians on real patients beyond Patient Zero.</span></div>
+      <div class="rung"><span class="ph">STEP 5</span><span class="name">ROBOTICS</span><span class="when">2028–30</span><span class="desc">The escalation ladder climbs: vision, home robot, mobile manipulation — the Twin grows a body.</span></div>
+      <div class="rung"><span class="ph">STEP 6</span><span class="name">PUBLICATIONS</span><span class="when">2027–30</span><span class="desc">Workshop → conference → journal. The company publishes like a lab, because it is one.</span></div>
+      <div class="rung"><span class="ph">STEP 7</span><span class="name">STANFORD PHD</span><span class="when">~2030</span><span class="desc">Applied from strength: patients, datasets, prototypes, collaborators, and likely funding already in hand.</span></div>
+      <div class="rung"><span class="ph">STEP 8</span><span class="name">HUMAN DIGITAL TWIN INSTITUTE</span><span class="when">THE DECADE'S END</span><span class="desc">A mission-driven research company matured into a world-class research institute.</span></div>
+    </div>
+
+    <div class="quote">
+      "This was never one patient's project. The mission: <strong>to create the world's first comprehensive Human Digital Twin
+      platform that augments people with severe neurological disabilities</strong> — enabling greater communication, independence,
+      health, and participation in society. Patient Zero is the inspiration and the first implementation. The platform is
+      designed from day one for everyone with cerebral palsy, stroke, spinal cord injury, TBI, Parkinson's, ALS, and beyond."
+    </div>
+  </section>
 </section>
 
 <script>

@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HER BODY — A 12-Month War Room</title>
+  <meta name="description" content="Her Body is a 12-month war room: push one human body to its biological limit, and where biology stops, engineer the rest. Patient Zero for the Human Digital Twin." />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;600;800&family=Sora:wght@300;400;500;600&display=swap');
+    :root{
+      --bg:#f4f3ef;
+      --bg2:#ffffff;
+      --bg3:#edecea;
+      --border:rgba(0,0,0,0.08);
+      --border2:rgba(0,0,0,0.15);
+      --text:#0e0e0e;
+      --muted:#666560;
+      --dim:#999894;
+      /* THE TWO FRONTS */
+      --pulse:#e02848;            /* FRONT I — BIOLOGY */
+      --pulse2:#b81f3c;
+      --machine:#00c8b0;          /* FRONT II — MACHINE */
+      --machine2:#00a896;
+      /* workstream support colors */
+      --blue:#1a6ef5;
+      --green:#1db85a;
+      --violet:#7a5af5;
+      --yellow:#f0b429;
+      --mono:'Share Tech Mono', monospace;
+      --display:'Orbitron', sans-serif;
+      --body:'Sora', sans-serif;
+      --radius:6px;
+      --radius-lg:10px;
+      --soft:#f7f6f2;
+      --pulseSoft:rgba(224,40,72,0.06);
+      --machineSoft:rgba(0,200,176,0.06);
+      --blueSoft:rgba(26,110,245,0.06);
+      --greenSoft:rgba(29,184,90,0.07);
+      --violetSoft:rgba(122,90,245,0.06);
+      --amberSoft:rgba(240,180,41,0.09);
+    }
+    *,*::before,*::after{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    html,body{height:100%; margin:0; font-family:var(--body); font-size:15px; color:var(--text); background:var(--bg); line-height:1.6;}
+    body::before{content:''; position:fixed; inset:0; background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.012) 2px,rgba(0,0,0,0.012) 4px); pointer-events:none; z-index:0;}
+    .page{min-height:100vh; padding:0 0 64px; display:flex; flex-direction:column; position:relative; z-index:1;}
+
+    /* ===== HEADER — dark war-room band ===== */
+    header{
+      position:relative; text-align:left;
+      background:var(--text); color:var(--bg);
+      padding:56px max(48px, calc((100vw - 1200px)/2)) 12px;
+      overflow:hidden;
+      background-image:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(255,255,255,0.03) 3px,rgba(255,255,255,0.03) 6px);
+    }
+    .topline{display:flex; align-items:center; gap:10px; margin-bottom:18px;}
+    .compass{font-family:var(--mono); font-size:12px; color:var(--pulse); line-height:1; animation:blink 1.2s infinite;}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+    .badge{display:inline-block; font-family:var(--mono); font-size:11px; letter-spacing:.08em; color:var(--bg); background:rgba(255,255,255,0.06); border:0.5px solid rgba(255,255,255,0.18); border-radius:4px; padding:6px 14px;}
+    h1{margin:0 0 6px; font-family:var(--display); font-size:clamp(30px,5vw,54px); font-weight:800; line-height:1.05; letter-spacing:-.01em; color:#fff;}
+    h1 .machineWord{color:var(--machine);}
+    h2{margin:0 0 8px; font-family:var(--display); font-size:clamp(13px,1.6vw,18px); font-weight:600; letter-spacing:.16em; color:var(--pulse);}
+    .sub{margin-top:12px; font-family:var(--mono); font-size:11px; color:rgba(255,255,255,0.5); letter-spacing:.08em;}
+    .sub b{color:rgba(255,255,255,0.85); font-weight:400;}
+    /* signature: ECG trace that becomes a machine clock signal */
+    .trace{display:block; width:100%; height:64px; margin-top:22px;}
+    .trace path{fill:none; stroke:url(#traceGrad); stroke-width:1.6; stroke-linejoin:round; stroke-linecap:round;}
+    .trace .scan{stroke-dasharray:1400; stroke-dashoffset:1400; animation:scan 5s linear infinite;}
+    @keyframes scan{to{stroke-dashoffset:0}}
+    .trace-labels{display:flex; justify-content:space-between; font-family:var(--mono); font-size:9.5px; letter-spacing:.14em; margin-top:4px; padding-bottom:14px;}
+    .trace-labels .l{color:var(--pulse);}
+    .trace-labels .r{color:var(--machine);}
+
+    /* ===== TAB NAV ===== */
+    .tabbar{
+      position:sticky; top:0; z-index:50;
+      background:var(--text);
+      background-image:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(255,255,255,0.03) 3px,rgba(255,255,255,0.03) 6px);
+      padding:0 max(48px, calc((100vw - 1200px)/2));
+      display:flex; gap:6px; overflow-x:auto;
+      border-bottom:2px solid rgba(255,255,255,0.08);
+      margin-bottom:40px;
+    }
+    .tabbar::-webkit-scrollbar{display:none}
+    .tab{
+      appearance:none; cursor:pointer;
+      background:rgba(255,255,255,0.06);
+      border:0.5px solid rgba(255,255,255,0.14); border-bottom:none;
+      border-radius:6px 6px 0 0;
+      font-family:var(--mono); font-size:11px; letter-spacing:.1em;
+      color:rgba(255,255,255,0.55);
+      padding:13px 18px 12px; margin-top:10px; margin-bottom:-2px;
+      white-space:nowrap; display:flex; align-items:baseline; gap:8px;
+      transition:color .18s, background .18s;
+    }
+    .tab .num{color:rgba(255,255,255,0.3); font-size:10px;}
+    .tab:hover{color:#fff; background:rgba(255,255,255,0.12);}
+    .tab.active{background:var(--bg); color:var(--text); border-color:var(--bg); box-shadow:inset 0 3px 0 var(--pulse); padding-top:14px;}
+    .tab.active .num{color:var(--pulse2);}
+    .tab:focus-visible{outline:1px dashed var(--machine); outline-offset:-4px;}
+
+    .tab-panel{display:none; animation:panelIn .25s ease;}
+    .tab-panel.active{display:block;}
+    @keyframes panelIn{from{opacity:0; transform:translateY(4px)} to{opacity:1; transform:none}}
+
+    /* ===== GENERIC SECTION ===== */
+    .sec{max-width:1200px; width:100%; margin:0 auto; padding:0 48px;}
+    .sec + .sec{margin-top:48px;}
+    .kicker{font-family:var(--mono); letter-spacing:.12em; color:var(--dim); font-size:10px; text-transform:uppercase; margin-bottom:12px;}
+    .kicker::before{content:'// ';}
+    .sec h3{margin:0; font-family:var(--display); color:var(--text); font-size:clamp(18px,2.2vw,26px); letter-spacing:-.01em; font-weight:600; line-height:1.2;}
+    .lead{max-width:720px; margin:12px 0 24px; line-height:1.8; font-size:14px; color:var(--muted);}
+    .lead strong{color:var(--text); font-weight:600;}
+
+    /* mission rule */
+    .mission{max-width:1200px; width:100%; margin:0 auto 28px; padding:0 48px; display:grid; grid-template-columns:auto 1fr; gap:12px; align-items:center; font-size:13px; color:var(--muted);}
+    .mission:before{content:'//'; font-family:var(--mono); color:var(--pulse); font-size:12px;}
+    .mission strong{font-weight:500;}
+
+    /* ===== TWO FRONTS ===== */
+    .fronts{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:16px;}
+    .front{border:0.5px solid var(--border); border-radius:var(--radius-lg); background:var(--bg2); padding:24px 26px; transition:border-color .18s, transform .18s; position:relative;}
+    .front:hover{transform:translateY(-1px);}
+    .front.bio{border-top:3px solid var(--pulse);}
+    .front.mech{border-top:3px solid var(--machine);}
+    .front.bio:hover{border-color:var(--pulse);}
+    .front.mech:hover{border-color:var(--machine);}
+    .front .fid{font-family:var(--mono); font-size:10px; letter-spacing:.12em; margin-bottom:8px;}
+    .front.bio .fid{color:var(--pulse2);}
+    .front.mech .fid{color:var(--machine2);}
+    .front h4{margin:0 0 10px; font-family:var(--display); font-size:16px; font-weight:600; letter-spacing:.01em;}
+    .front p{margin:0 0 10px; font-size:13px; line-height:1.75; color:var(--muted);}
+    .front strong{color:var(--text); font-weight:600;}
+    .front ul{margin:8px 0 0 18px; padding:0; font-size:13px; line-height:1.8; color:var(--muted);}
+
+    .quote{margin-top:20px; border:0.5px solid var(--border); border-left:3px solid var(--pulse); border-radius:var(--radius); padding:16px 20px; font-style:italic; font-size:14px; line-height:1.8; background:var(--bg2); color:var(--muted);}
+    .quote strong{color:var(--text); font-weight:600; font-style:normal;}
+
+    /* stat strip */
+    .stats{display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-top:24px;}
+    .stat{border:0.5px solid var(--border); border-radius:var(--radius); background:var(--bg2); padding:16px 18px;}
+    .stat .n{font-family:var(--display); font-weight:800; font-size:24px; letter-spacing:-.01em;}
+    .stat .l{font-family:var(--mono); font-size:9.5px; letter-spacing:.1em; color:var(--dim); text-transform:uppercase; margin-top:4px;}
+    .stat:nth-child(odd) .n{color:var(--pulse2);}
+    .stat:nth-child(even) .n{color:var(--machine2);}
+
+    /* ===== 12-MONTH GRID ===== */
+    .calendar{flex:1; max-width:1600px; width:100%; margin:0 auto; padding:0 48px; display:grid; grid-template-columns:repeat(6,1fr); gap:12px;}
+    .day{background:var(--bg2); border:0.5px solid var(--border); border-radius:var(--radius-lg); display:flex; flex-direction:column; overflow:hidden; transition:border-color .18s, transform .18s;}
+    .day:hover{border-color:var(--border2); transform:translateY(-1px);}
+    .dayhead{background:var(--text); color:#fff; padding:14px 12px 12px; min-height:78px; display:flex; flex-direction:column; justify-content:center; gap:3px; background-image:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(255,255,255,0.03) 3px,rgba(255,255,255,0.03) 6px);}
+    .dow{font-family:var(--display); font-weight:600; letter-spacing:.06em; font-size:13px; color:#fff;}
+    .date{font-family:var(--mono); font-size:10px; color:rgba(255,255,255,0.5); letter-spacing:.08em;}
+    .theme{font-family:var(--mono); font-size:9.5px; color:var(--pulse); letter-spacing:.1em; text-transform:uppercase;}
+    .blocks{display:flex; flex-direction:column; gap:8px; padding:10px; flex:1;}
+    .block{border:0.5px solid var(--border); border-left:3px solid var(--dim); border-radius:var(--radius); padding:9px 10px 8px; background:var(--soft); transition:border-color .18s;}
+    .block:hover{border-color:var(--border2);}
+    .block .time{font-family:var(--mono); font-size:10px; color:var(--muted); letter-spacing:.06em; margin-bottom:3px;}
+    .block .title{font-size:13px; font-weight:600; line-height:1.3; color:var(--text);}
+    .block .meta{font-family:var(--mono); font-size:10px; color:var(--dim); margin-top:3px; letter-spacing:.03em;}
+    /* workstream colors */
+    .block.assess{background:var(--pulseSoft); border-left-color:var(--pulse)}
+    .block.swallow{background:var(--blueSoft); border-left-color:var(--blue)}
+    .block.hands{background:var(--violetSoft); border-left-color:var(--violet)}
+    .block.feet{background:var(--greenSoft); border-left-color:var(--green)}
+    .block.conf{background:var(--amberSoft); border-left-color:var(--yellow)}
+    .block.twin{background:var(--machineSoft); border-left-color:var(--machine)}
+    .block.review{background:var(--bg3); border-left-color:var(--dim)}
+    /* legend */
+    .legend{max-width:1600px; width:100%; margin:0 auto 18px; padding:0 48px; display:flex; flex-wrap:wrap; gap:8px;}
+    .lg{font-family:var(--mono); font-size:9.5px; letter-spacing:.08em; border:0.5px solid var(--border2); border-radius:4px; padding:4px 10px; background:var(--bg2); color:var(--muted); display:inline-flex; align-items:center; gap:7px;}
+    .lg i{width:10px; height:10px; border-radius:2px; display:inline-block;}
+
+    /* footer panels */
+    .footer{max-width:1600px; width:100%; margin:28px auto 0; padding:0 48px; display:grid; grid-template-columns:1.2fr .8fr; gap:14px;}
+    .panel{border:0.5px solid var(--border); border-radius:var(--radius-lg); background:var(--bg2); padding:22px 24px; transition:border-color .18s, transform .18s;}
+    .panel:hover{border-color:var(--border2); transform:translateY(-1px);}
+    .panel h3{margin:0 0 14px; font-family:var(--display); font-size:15px; font-weight:600; letter-spacing:.02em;}
+    .panel h3::before{content:'// '; font-family:var(--mono); font-size:11px; color:var(--pulse2); letter-spacing:.08em;}
+    .principles{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; font-size:12.5px; line-height:1.6; color:var(--muted);}
+    .principles strong{color:var(--text); font-weight:600;}
+    .allocation{width:100%; border-collapse:collapse; font-size:12.5px;}
+    .allocation th{background:var(--text); color:#fff; font-family:var(--mono); font-weight:400; padding:8px; letter-spacing:.1em; font-size:10px; text-align:left;}
+    .allocation th:last-child{text-align:right;}
+    .allocation td{border-bottom:0.5px solid var(--border); padding:7px 8px; color:var(--muted);}
+    .allocation td:last-child{text-align:right; font-family:var(--mono); color:var(--text);}
+    .allocation tr:last-child td{border-bottom:none; color:var(--text); font-weight:600;}
+
+    /* ===== ESCALATION LADDER ===== */
+    .ladder{display:grid; gap:0; margin-top:16px; max-width:760px;}
+    .rung{
+      border:0.5px solid var(--border); border-left:3px solid var(--machine);
+      border-radius:var(--radius); background:var(--bg2);
+      padding:14px 18px; display:grid; grid-template-columns:56px 1fr auto; gap:16px; align-items:baseline;
+      transition:border-color .18s, transform .18s; position:relative;
+    }
+    .rung:hover{border-color:var(--machine); transform:translateX(2px);}
+    .rung + .rung{margin-top:10px;}
+    .rung + .rung::before{content:'▼'; position:absolute; top:-13px; left:24px; font-size:8px; color:var(--dim);}
+    .rung .ph{font-family:var(--mono); font-size:10px; letter-spacing:.1em; color:var(--machine2);}
+    .rung .name{font-family:var(--display); font-size:13.5px; font-weight:600;}
+    .rung .desc{grid-column:2 / 4; font-size:12.5px; line-height:1.7; color:var(--muted); margin-top:2px;}
+    .rung .when{font-family:var(--mono); font-size:9.5px; letter-spacing:.08em; color:var(--dim); white-space:nowrap;}
+    .rung.now{border-left-color:var(--pulse);}
+    .rung.now .ph{color:var(--pulse2);}
+
+    .layers{display:grid; gap:10px; margin-top:16px;}
+    .layer{border-radius:var(--radius); padding:14px 16px; border:0.5px solid var(--border); border-left:3px solid var(--machine); background:var(--soft); font-size:13px; line-height:1.7; color:var(--muted);}
+    .layer:nth-child(2){border-left-color:var(--violet);}
+    .layer:nth-child(3){border-left-color:var(--blue);}
+    .layer strong{color:var(--text); font-weight:600;}
+    .layer em{font-family:var(--mono); font-style:normal; font-size:10.5px; color:var(--machine2); letter-spacing:.06em; text-transform:uppercase;}
+    .layer:nth-child(2) em{color:var(--violet);}
+    .layer:nth-child(3) em{color:var(--blue);}
+
+    .flow{display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-top:12px;}
+    .flow div{border:0.5px solid var(--border); border-radius:var(--radius); padding:12px; background:var(--soft); font-size:12px; line-height:1.6; color:var(--muted); transition:border-color .18s;}
+    .flow div:hover{border-color:var(--border2);}
+    .flow strong{color:var(--text); font-weight:600; display:inline-block; margin:4px 0 2px;}
+
+    /* ===== ROLES ROSTER ===== */
+    .roster{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:16px;}
+    .agent{border:0.5px solid var(--border); border-radius:var(--radius-lg); background:var(--bg2); padding:18px 20px; display:flex; flex-direction:column; gap:8px; transition:border-color .18s, transform .18s;}
+    .agent:hover{border-color:var(--border2); transform:translateY(-1px);}
+    .agent.bio-role{border-left:3px solid var(--pulse);}
+    .agent.mech-role{border-left:3px solid var(--machine);}
+    .agent-top{display:flex; justify-content:space-between; align-items:baseline; gap:10px;}
+    .agent-id{font-family:var(--mono); font-size:10px; letter-spacing:.1em; color:var(--dim);}
+    .agent-status{font-family:var(--mono); font-size:9.5px; letter-spacing:.1em; border-radius:4px; padding:3px 8px; white-space:nowrap; color:#8a2a3f; background:rgba(224,40,72,0.08); border:0.5px solid rgba(224,40,72,0.3);}
+    .agent.mech-role .agent-status{color:#007a6b; background:rgba(0,200,176,0.1); border-color:rgba(0,200,176,0.3);}
+    .agent h5{margin:0; font-family:var(--display); font-size:14px; font-weight:600; letter-spacing:.01em;}
+    .agent .role{font-family:var(--mono); font-size:10px; letter-spacing:.08em; text-transform:uppercase;}
+    .agent.bio-role .role{color:var(--pulse2);}
+    .agent.mech-role .role{color:var(--machine2);}
+    .agent p{margin:0; font-size:12.5px; line-height:1.7; color:var(--muted);}
+    .agent p strong{color:var(--text); font-weight:600;}
+
+    /* CTA */
+    .cta-band{max-width:1200px; margin:48px auto 0; padding:0 48px;}
+    .cta-inner{background:var(--text); color:rgba(255,255,255,0.7); border-radius:var(--radius-lg); padding:36px 40px; background-image:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(255,255,255,0.03) 3px,rgba(255,255,255,0.03) 6px);}
+    .cta-inner h3{color:#fff; margin:0 0 10px; font-family:var(--display); font-size:clamp(18px,2.4vw,28px); font-weight:800; letter-spacing:-.01em;}
+    .cta-inner p{margin:0 0 20px; font-size:13.5px; line-height:1.8; max-width:640px;}
+    .cta-inner p strong{color:#fff; font-weight:600;}
+    .btnrow{display:flex; flex-wrap:wrap; gap:10px;}
+    .btn{font-family:var(--mono); font-size:11px; letter-spacing:.1em; text-decoration:none; border-radius:4px; padding:11px 20px; border:0.5px solid transparent; transition:transform .15s, box-shadow .15s;}
+    .btn:hover{transform:translateY(-1px);}
+    .btn.primary{background:var(--pulse); color:#fff;}
+    .btn.primary:hover{box-shadow:0 4px 14px rgba(224,40,72,0.4);}
+    .btn.ghost{background:rgba(255,255,255,0.06); color:#fff; border-color:rgba(255,255,255,0.25);}
+    .btn.ghost:hover{border-color:var(--machine); color:var(--machine);}
+
+    .colophon{max-width:1200px; margin:40px auto 0; padding:0 48px; font-family:var(--mono); font-size:10px; letter-spacing:.08em; color:var(--dim); line-height:1.9;}
+
+    @media (prefers-reduced-motion:reduce){
+      .tab-panel{animation:none}
+      .compass{animation:none}
+      .trace .scan{animation:none; stroke-dashoffset:0}
+      *{transition:none !important}
+    }
+    @media (max-width:1200px){ .calendar{grid-template-columns:repeat(3,1fr);} }
+    @media (max-width:900px){
+      .fronts,.roster,.footer{grid-template-columns:1fr;}
+      .stats{grid-template-columns:repeat(2,1fr);}
+      .flow{grid-template-columns:repeat(2,1fr);}
+      .principles{grid-template-columns:1fr 1fr;}
+    }
+    @media (max-width:640px){
+      header{padding-left:24px; padding-right:24px;}
+      .tabbar{padding-left:24px; padding-right:24px;}
+      .sec,.mission,.calendar,.legend,.footer,.cta-band,.colophon{padding-left:24px; padding-right:24px;}
+      .calendar{grid-template-columns:1fr 1fr;}
+      .principles{grid-template-columns:1fr;}
+      .rung{grid-template-columns:48px 1fr;}
+      .rung .when{grid-column:1 / 3;}
+      .rung .desc{grid-column:1 / 3;}
+    }
+    @media (max-width:460px){ .calendar{grid-template-columns:1fr;} .stats{grid-template-columns:1fr;} }
+  </style>
+</head>
+<body>
+<div class="page">
+
+<header>
+  <div class="topline">
+    <span class="compass">▮</span>
+    <span class="badge">PATIENT ZERO PROGRAM · 12-MONTH CAMPAIGN · SILICON VALLEY LAUNCH 2027</span>
+  </div>
+  <h2>A 12-MONTH WAR ROOM</h2>
+  <h1>HER BODY, <span class="machineWord">THEN THE MACHINE.</span></h1>
+  <div class="sub">DOCTRINE: <b>PUSH THE BODY TO ITS BIOLOGICAL LIMIT.</b> WHERE THE BODY NO LONGER LISTENS, <b>ENGINEER ONE THAT DOES.</b></div>
+
+  <svg class="trace" viewBox="0 0 1200 64" preserveAspectRatio="none" aria-hidden="true">
+    <defs>
+      <linearGradient id="traceGrad" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#e02848"/>
+        <stop offset="0.46" stop-color="#e02848"/>
+        <stop offset="0.56" stop-color="#00c8b0"/>
+        <stop offset="1" stop-color="#00c8b0"/>
+      </linearGradient>
+    </defs>
+    <!-- heartbeat on the left, square clock signal on the right -->
+    <path opacity="0.25" d="M0,32 H60 l10,-6 10,6 H140 l8,-22 10,40 8,-18 H240 l10,-6 10,6 H330 l8,-22 10,40 8,-18 H440 l10,-6 10,6 H520 l8,-22 10,40 8,-18 H600 H640 V12 H700 V52 H760 V12 H820 V52 H880 V12 H940 V52 H1000 V12 H1060 V52 H1120 V12 H1200"/>
+    <path class="scan" d="M0,32 H60 l10,-6 10,6 H140 l8,-22 10,40 8,-18 H240 l10,-6 10,6 H330 l8,-22 10,40 8,-18 H440 l10,-6 10,6 H520 l8,-22 10,40 8,-18 H600 H640 V12 H700 V52 H760 V12 H820 V52 H880 V12 H940 V52 H1000 V12 H1060 V52 H1120 V12 H1200"/>
+  </svg>
+  <div class="trace-labels"><span class="l">FRONT I · BIOLOGY</span><span class="r">FRONT II · MACHINE</span></div>
+</header>
+
+<nav class="tabbar" role="tablist" aria-label="Sections">
+  <button class="tab active" role="tab" aria-selected="true" data-tab="doctrine"><span class="num">01</span>THE DOCTRINE</button>
+  <button class="tab" role="tab" aria-selected="false" data-tab="warroom"><span class="num">02</span>12-MONTH WAR ROOM</button>
+  <button class="tab" role="tab" aria-selected="false" data-tab="machine"><span class="num">03</span>THE MACHINE</button>
+  <button class="tab" role="tab" aria-selected="false" data-tab="join"><span class="num">04</span>JOIN THE WAR ROOM</button>
+</nav>
+
+<!-- ============ TAB 01 · DOCTRINE ============ -->
+<section class="tab-panel active" id="panel-doctrine" role="tabpanel">
+  <div class="mission"><strong>Rule of engagement: biology drives the technology, never the other way around. Every clinical gain becomes structured data. Every data point trains the machine.</strong></div>
+
+  <section class="sec">
+    <div class="kicker">WHY WE EXIST</div>
+    <h3>ONE BODY. TWELVE MONTHS. TOTAL WAR.</h3>
+    <p class="lead">
+      <strong>Her Body</strong> begins with one young woman living with severe cerebral palsy — our <strong>Patient Zero</strong>.
+      Cerebral palsy is not one disease. It is dozens of problems occurring together: swallowing, muscle tone, nutrition,
+      orthopedic deformity, communication, posture, pain, sleep, isolation. Medicine treats them one clinic visit at a time.
+      <strong>We treat them like a campaign</strong> — every subsystem gets its own front, its own specialists, its own metrics, and its own deadline.
+    </p>
+    <p class="lead">
+      We are honest about the limit: <strong>no one can reverse the brain injury underneath cerebral palsy.</strong>
+      So we don't define victory as a cure. We define it as function — eating safely, communicating clearly, operating
+      technology independently, moving without pain. We push her biology to its ceiling. And where her body no longer
+      listens to her, <strong>we engineer a body that does.</strong>
+    </p>
+
+    <div class="fronts">
+      <div class="front bio">
+        <div class="fid">FRONT I · BIOLOGY — MONTHS 01–12</div>
+        <h4>PUSH THE BODY TO ITS LIMIT</h4>
+        <p>A world-class multidisciplinary clinical program run with startup discipline. Six workstreams attack six subsystems in parallel:</p>
+        <ul>
+          <li><strong>Assess</strong> — a 500-page baseline across 14+ specialties. No treatment before total intelligence.</li>
+          <li><strong>Swallow</strong> — instrumented studies (VFSS/FEES), then therapy. Safe eating is objective #1.</li>
+          <li><strong>Hands</strong> — not "normal hands." <strong>Useful hands</strong>: hold a spoon, press a switch, drive a chair.</li>
+          <li><strong>Feet</strong> — orthopedic correction for positioning, transfers, and pain — measured, not promised.</li>
+          <li><strong>Confidence</strong> — nutrition, posture, style, travel, purpose. Capability grows confidence.</li>
+          <li><strong>Twin</strong> — every result digitized into her Digital Twin from day one.</li>
+        </ul>
+      </div>
+      <div class="front mech">
+        <div class="fid">FRONT II · MACHINE — MONTHS 03 → YEARS 2–5</div>
+        <h4>ENGINEER WHAT BIOLOGY CAN'T</h4>
+        <p>The clinical campaign generates something no lab has: a continuous, consented, whole-person dataset of one human being fighting for function. That dataset becomes:</p>
+        <ul>
+          <li><strong>The Human Digital Twin</strong> — a living model of her medications, range of motion, swallowing, speech, sleep, goals, and routines.</li>
+          <li><strong>An AI caregiver</strong> that coordinates specialists and never forgets a detail.</li>
+          <li><strong>An escalation ladder to robotics</strong> — voice, vision, home robot, mobile manipulation, and finally humanoid assistance. Hardware arrives when the software has earned it.</li>
+        </ul>
+        <p><strong>Patient Zero is not an experiment. She is the first complete Human Digital Twin.</strong> The platform generalizes to stroke, spinal cord injury, Parkinson's, MS, TBI, and aging.</p>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><div class="n">6</div><div class="l">Clinical workstreams</div></div>
+      <div class="stat"><div class="n">8</div><div class="l">Machine phases · twin → humanoid</div></div>
+      <div class="stat"><div class="n">14+</div><div class="l">Specialties in the baseline</div></div>
+      <div class="stat"><div class="n">$200K</div><div class="l">Year-one deployment</div></div>
+    </div>
+
+    <div class="quote">
+      "Families are handed a diagnosis and told to accept it. We refuse the diagnosis as an answer and treat it as a
+      <strong>map of hundreds of individual, attackable problems.</strong> Every one of them can be improved separately.
+      So we improve every one of them — and we write it all down, so the next family never starts from zero."
+    </div>
+  </section>
+</section>
+
+<!-- ============ TAB 02 · 12-MONTH WAR ROOM ============ -->
+<section class="tab-panel" id="panel-warroom" role="tabpanel">
+  <div class="mission"><strong>Campaign rule: measure first, treat second, digitize always. No intervention without a baseline. No result without data capture.</strong></div>
+
+  <div class="legend">
+    <span class="lg"><i style="background:var(--pulse)"></i>ASSESS</span>
+    <span class="lg"><i style="background:var(--blue)"></i>SWALLOW</span>
+    <span class="lg"><i style="background:var(--violet)"></i>HANDS</span>
+    <span class="lg"><i style="background:var(--green)"></i>FEET</span>
+    <span class="lg"><i style="background:var(--yellow)"></i>CONFIDENCE</span>
+    <span class="lg"><i style="background:var(--machine)"></i>DIGITAL TWIN</span>
+    <span class="lg"><i style="background:var(--dim)"></i>WAR ROOM REVIEW</span>
+  </div>
+
+  <section class="calendar" id="calendar"></section>
+
+  <footer class="footer">
+    <div class="panel">
+      <h3>BATTLE PRINCIPLES</h3>
+      <div class="principles">
+        <div>🎯 <strong>Measure first.</strong><br/>Months 1–2 diagnose the battlefield across 14+ specialties. No guessing.</div>
+        <div>🩺 <strong>Biology leads.</strong><br/>Clinicians set the objectives. Engineers build to serve them.</div>
+        <div>📎 <strong>Digitize everything.</strong><br/>Every scan, session, and score trains the Human Digital Twin.</div>
+        <div>⏱️ <strong>Function over form.</strong><br/>A hand that presses a switch beats a hand that merely looks better.</div>
+        <div>🔍 <strong>Review without blame.</strong><br/>A therapy that fails is intelligence, not failure. Log it, redirect.</div>
+        <div>🛡️ <strong>Her consent, her pace.</strong><br/>Patient Zero is a person, not a project. Comfort and dignity gate every decision.</div>
+      </div>
+    </div>
+    <div class="panel">
+      <h3>YEAR-ONE ALLOCATION · US$200,000</h3>
+      <table class="allocation">
+        <tr><th>LINE</th><th>BUDGET</th></tr>
+        <tr><td>Medical evaluations &amp; diagnostics</td><td>$25,000</td></tr>
+        <tr><td>Intensive rehab · PT / OT / speech-swallow</td><td>$60,000</td></tr>
+        <tr><td>Orthopedic &amp; spasticity interventions*</td><td>$50,000</td></tr>
+        <tr><td>Assistive tech &amp; home adaptation</td><td>$20,000</td></tr>
+        <tr><td>Specialist travel &amp; accommodation</td><td>$20,000</td></tr>
+        <tr><td>Digital Twin prototype &amp; data platform</td><td>$15,000</td></tr>
+        <tr><td>Contingency</td><td>$10,000</td></tr>
+        <tr><td><strong>Total deployed</strong></td><td><strong>$200,000</strong></td></tr>
+      </table>
+      <p style="margin:10px 0 0; font-family:var(--mono); font-size:9.5px; color:var(--dim); letter-spacing:.05em;">*RELEASED ONLY ON SPECIALIST RECOMMENDATION AFTER THE MONTH 1–2 BASELINE.</p>
+    </div>
+  </footer>
+</section>
+
+<!-- ============ TAB 03 · THE MACHINE ============ -->
+<section class="tab-panel" id="panel-machine" role="tabpanel">
+  <div class="mission"><strong>Engineering rule: software matures while hardware catches up. No humanoid in Year 1 — the return is too low. Climb the ladder.</strong></div>
+
+  <section class="sec">
+    <div class="kicker">FRONT II · THE HUMAN DIGITAL TWIN</div>
+    <h3>ONE PATIENT. ONE MODEL. EVERY DISEASE EVENTUALLY.</h3>
+    <p class="lead">
+      We are not building "AI for cerebral palsy." We are building the <strong>Human Digital Twin</strong> —
+      a continuously updated model of one whole person: medical history, medications, therapy response, range of motion,
+      swallowing progress, speech, facial expression, nutrition, sleep, emotional state, goals, and daily routines.
+      It coordinates her care, personalizes her therapy, and preserves knowledge across every clinician and caregiver
+      she will ever have. <strong>Then it scales — to stroke, spinal cord injury, Parkinson's, MS, TBI, and age-related disability.</strong>
+    </p>
+
+    <div class="layers">
+      <div class="layer"><em>LAYER 1 · SENSE</em> — <strong>Whole-person data capture.</strong> Motion capture, 3D gait and posture scans, instrumented swallow studies, wearables, therapy session logs, imaging, bloodwork — one schema, one timeline, one patient.</div>
+      <div class="layer"><em>LAYER 2 · MODEL</em> — <strong>The Twin itself.</strong> A living state model that tracks every subsystem, predicts therapy response, flags regressions early, and answers the question every specialist asks: "what has changed since I last saw her?"</div>
+      <div class="layer"><em>LAYER 3 · ACT</em> — <strong>Agents and machines.</strong> The AI caregiver schedules, reminds, and briefs. The voice and vision systems give her communication and control. The robots — when they arrive — inherit a model that already knows her body better than any manual ever could.</div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="kicker">THE ESCALATION LADDER</div>
+    <h3>SOFTWARE FIRST. HUMANOID LAST.</h3>
+    <p class="lead">Each phase must prove daily value before the next unlocks. Where her body doesn't listen to her, this is how we build one that does — deliberately, in order.</p>
+    <div class="ladder">
+      <div class="rung now"><span class="ph">PHASE 1</span><span class="name">HER DIGITAL TWIN</span><span class="when">MONTHS 03–12</span><span class="desc">Data platform + living model. Built directly from the clinical campaign. The foundation everything else stands on.</span></div>
+      <div class="rung"><span class="ph">PHASE 2</span><span class="name">AI CAREGIVER</span><span class="when">MONTHS 06–12</span><span class="desc">Coordinates specialists, medication, and routines. Briefs every clinician from the Twin. Never forgets.</span></div>
+      <div class="rung"><span class="ph">PHASE 3</span><span class="name">VOICE</span><span class="when">YEAR 2</span><span class="desc">A personal voice interface tuned to her speech and switch access — expression at the speed of thought, not of muscle.</span></div>
+      <div class="rung"><span class="ph">PHASE 4</span><span class="name">CONVERSATION AGENT</span><span class="when">YEAR 2</span><span class="desc">A companion that knows her history, her humor, and her goals. Reduces isolation; extends independence.</span></div>
+      <div class="rung"><span class="ph">PHASE 5</span><span class="name">VISION SYSTEM</span><span class="when">YEAR 2–3</span><span class="desc">Eye tracking, gesture reading, and environmental awareness — control of screens, chairs, and rooms without reliable hands.</span></div>
+      <div class="rung"><span class="ph">PHASE 6</span><span class="name">HOME ROBOT</span><span class="when">YEAR 3</span><span class="desc">Stationary assistance for the highest-frequency tasks the Twin has identified: fetch, position, feed-assist.</span></div>
+      <div class="rung"><span class="ph">PHASE 7</span><span class="name">MOBILE MANIPULATION</span><span class="when">YEAR 4</span><span class="desc">A robot that moves through her home and acts in it — trained on years of Twin data about how she actually lives.</span></div>
+      <div class="rung"><span class="ph">PHASE 8</span><span class="name">HUMANOID</span><span class="when">YEAR 5</span><span class="desc">The body that listens. Full-assistance humanoid platform, arriving only when the software has earned the hardware.</span></div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="kicker">THE LOOP</div>
+    <h3>HOW BIOLOGY TRAINS THE MACHINE</h3>
+    <div class="flow">
+      <div>🩺<br/><strong>She fights</strong><br/>therapy sessions, procedures, daily routines on Front I</div>
+      <div>🗄️<br/><strong>We capture</strong><br/>every metric, image, and outcome enters the Twin</div>
+      <div>🧠<br/><strong>The Twin learns</strong><br/>models her body, predicts response, flags regression</div>
+      <div>🤖<br/><strong>The machine serves</strong><br/>agents and robots act on what the Twin knows</div>
+    </div>
+    <div class="quote">
+      "Every improvement in her health becomes structured data that teaches the Digital Twin how to support not just her —
+      but eventually <strong>everyone living with a complex disability.</strong> One patient, fully understood, is worth more
+      than a million patients, partially recorded."
+    </div>
+  </section>
+</section>
+
+<!-- ============ TAB 04 · JOIN ============ -->
+<section class="tab-panel" id="panel-join" role="tabpanel">
+  <div class="mission"><strong>Recruiting rule: we hire people who want their work to land on one real human being within weeks — not on a benchmark, someday.</strong></div>
+
+  <section class="sec">
+    <div class="kicker">OPEN POSTS · FOUNDING TEAM</div>
+    <h3>TWO FRONTS. ONE ROOM. YOUR POST IS OPEN.</h3>
+    <p class="lead">
+      Most medical AI teams never meet a patient. Most clinical teams never ship software.
+      In this war room, <strong>the surgeon and the roboticist share a whiteboard</strong>, and both answer
+      to the same metric: what can she do this month that she couldn't do last month?
+    </p>
+    <div class="roster">
+      <div class="agent bio-role">
+        <div class="agent-top"><span class="agent-id">POST BIO-01</span><span class="agent-status">RECRUITING</span></div>
+        <h5>Physiatrist / Neurorehabilitation Lead</h5>
+        <div class="role">FRONT I COMMAND · CLINICAL</div>
+        <p>Own the six clinical workstreams. Turn a 500-page baseline into a 12-month battle plan. <strong>You set the objectives the engineers build toward.</strong></p>
+      </div>
+      <div class="agent bio-role">
+        <div class="agent-top"><span class="agent-id">POST BIO-02</span><span class="agent-status">RECRUITING</span></div>
+        <h5>Speech-Language Pathologist · Dysphagia</h5>
+        <div class="role">SWALLOWING WORKSTREAM · CLINICAL</div>
+        <p>Run VFSS/FEES-guided therapy. Safe eating is objective #1 of the entire campaign — <strong>you own the campaign's first victory.</strong></p>
+      </div>
+      <div class="agent bio-role">
+        <div class="agent-top"><span class="agent-id">POST BIO-03</span><span class="agent-status">RECRUITING</span></div>
+        <h5>OT / PT · Upper &amp; Lower Limb</h5>
+        <div class="role">HANDS &amp; FEET WORKSTREAMS · CLINICAL</div>
+        <p>Spasticity management, splinting, serial casting, FES, and function-first goals: <strong>hold a spoon, press a switch, drive a chair.</strong></p>
+      </div>
+      <div class="agent bio-role">
+        <div class="agent-top"><span class="agent-id">POST BIO-04</span><span class="agent-status">RECRUITING</span></div>
+        <h5>Orthopedic Surgeon · CP Specialist</h5>
+        <div class="role">ADVISORY · SURGICAL BOARD</div>
+        <p>Evaluate and, where indicated, correct. $50K stands ready for interventions — <strong>released only on your recommendation.</strong></p>
+      </div>
+      <div class="agent mech-role">
+        <div class="agent-top"><span class="agent-id">POST ENG-01</span><span class="agent-status">RECRUITING</span></div>
+        <h5>Founding ML Engineer · Digital Twin</h5>
+        <div class="role">FRONT II COMMAND · ENGINEERING</div>
+        <p>Design the schema and models for a whole-person state representation. <strong>Patient Zero's Twin is the company.</strong> You build v0.1.</p>
+      </div>
+      <div class="agent mech-role">
+        <div class="agent-top"><span class="agent-id">POST ENG-02</span><span class="agent-status">RECRUITING</span></div>
+        <h5>Data Platform Engineer · Health</h5>
+        <div class="role">SENSE LAYER · ENGINEERING</div>
+        <p>One timeline for imaging, motion capture, wearables, therapy logs, and labs. Consented, secured, auditable. <strong>The dataset no lab has.</strong></p>
+      </div>
+      <div class="agent mech-role">
+        <div class="agent-top"><span class="agent-id">POST ENG-03</span><span class="agent-status">RECRUITING</span></div>
+        <h5>Computer Vision / Interaction Engineer</h5>
+        <div class="role">PHASES 3–5 · ENGINEERING</div>
+        <p>Eye tracking, gesture, and switch access that give her control of screens and rooms — <strong>communication at the speed of thought.</strong></p>
+      </div>
+      <div class="agent mech-role">
+        <div class="agent-top"><span class="agent-id">POST ENG-04</span><span class="agent-status">RECRUITING</span></div>
+        <h5>Robotics Engineer · Manipulation</h5>
+        <div class="role">PHASES 6–8 · ENGINEERING</div>
+        <p>Join early, ship software first, and lead the climb from home robot to mobile manipulation to humanoid — <strong>on a live deployment from day one.</strong></p>
+      </div>
+    </div>
+  </section>
+
+  <div class="cta-band">
+    <div class="cta-inner">
+      <h3>THE WAR ROOM OPENS IN SILICON VALLEY · 2027</h3>
+      <p>
+        If you are a clinician who is tired of treating one subsystem per visit, or an engineer who is tired of models
+        that never touch a life — <strong>this is the room.</strong> One patient. Twelve months. Total effort.
+        Then a platform for everyone whose body stopped listening.
+      </p>
+      <div class="btnrow">
+        <a class="btn primary" href="mailto:join@herbody.ai?subject=WAR%20ROOM%20APPLICATION">⬆ APPLY TO A POST</a>
+        <a class="btn ghost" href="mailto:hello@herbody.ai?subject=INVESTOR%20BRIEFING">REQUEST INVESTOR BRIEFING</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="colophon">
+    HER BODY · PATIENT ZERO PROGRAM — ALL CLINICAL DECISIONS ARE MADE BY LICENSED SPECIALISTS FOLLOWING FORMAL ASSESSMENT.
+    ALL DATA IS COLLECTED WITH INFORMED CONSENT AND HANDLED UNDER APPLICABLE HEALTH-PRIVACY LAW.
+    WE DO NOT PROMISE A CURE. WE PROMISE TOTAL, MEASURED, RELENTLESS EFFORT.
+  </div>
+</section>
+
+<script>
+/* ===== TABS ===== */
+document.querySelectorAll('.tab').forEach(t=>{
+  t.addEventListener('click',()=>{
+    document.querySelectorAll('.tab').forEach(x=>{x.classList.remove('active');x.setAttribute('aria-selected','false');});
+    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+    t.classList.add('active'); t.setAttribute('aria-selected','true');
+    document.getElementById('panel-'+t.dataset.tab).classList.add('active');
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ===== 12-MONTH CAMPAIGN GRID ===== */
+const months=[
+ {day:'MONTH 01',date:'Q1 · MOBILIZE',theme:'Total Baseline',blocks:[
+   ['assess','WK 1–4','Full biological assessment','neurology · ortho · GI · ENT · vision · dental'],
+   ['assess','WK 2–3','Imaging & labs','MRI review · X-ray · bone density · bloodwork'],
+   ['twin','WK 4','Twin schema v0','one patient · one timeline · one model'],
+   ['review','WK 4','War room #01','assessment gaps → orders']
+ ]},
+ {day:'MONTH 02',date:'Q1 · MOBILIZE',theme:'The Codex',blocks:[
+   ['assess','WK 5–8','Motion capture & 3D scans','gait · posture · facial · whole-body'],
+   ['swallow','WK 6','Instrumented swallow study','VFSS / FEES — why, not just what'],
+   ['assess','WK 8','Patient Zero Codex v1','500+ pages · every specialist · digitized'],
+   ['review','WK 8','War room #02','12-month battle plan locked']
+ ]},
+ {day:'MONTH 03',date:'Q1 · MOBILIZE',theme:'First Offensives',blocks:[
+   ['swallow','DAILY','Swallow therapy begins','posture · texture · technique'],
+   ['hands','WK 9','Spasticity board','botulinum toxin candidacy review'],
+   ['twin','WK 9–12','Data platform live','sessions stream into the Twin'],
+   ['conf','ONGOING','Nutrition program','dietitian-led · weight & energy']
+ ]},
+ {day:'MONTH 04',date:'Q2 · ENGAGE',theme:'Hands Campaign',blocks:[
+   ['hands','WK 13–16','OT intensive + splinting','function targets: spoon · switch · screen'],
+   ['hands','WK 14','FES trials','functional electrical stimulation'],
+   ['feet','WK 15','Orthopedic surgical consult','casting vs orthotics vs surgery'],
+   ['review','WK 16','War room #03','Q1 metrics vs plan']
+ ]},
+ {day:'MONTH 05',date:'Q2 · ENGAGE',theme:'Feet Campaign',blocks:[
+   ['feet','WK 17–20','Serial casting / orthotics','pain ↓ · positioning ↑ · transfers ↑'],
+   ['swallow','WK 18','Swallow re-study','objective progress check'],
+   ['hands','DAILY','Switch-access training','first independent device control'],
+   ['conf','WK 20','Wheelchair optimization','seating · posture · comfort']
+ ]},
+ {day:'MONTH 06',date:'Q2 · ENGAGE',theme:'Midpoint Audit',blocks:[
+   ['assess','WK 21–24','Half-year re-baseline','re-measure every subsystem'],
+   ['twin','WK 22','Twin v0.5','predicts therapy response'],
+   ['twin','WK 23','AI caregiver alpha','briefs every clinician automatically'],
+   ['review','WK 24','War room #04','double down / redirect decisions']
+ ]},
+ {day:'MONTH 07',date:'Q3 · ADVANCE',theme:'Communication',blocks:[
+   ['hands','DAILY','iPad / eye-gaze operation','tech independence milestone'],
+   ['twin','WK 25–28','Voice interface prototype','tuned to her speech & access'],
+   ['swallow','ONGOING','Texture progression','safer, wider diet'],
+   ['conf','WK 28','Professional photo day','style · hair · confidence']
+ ]},
+ {day:'MONTH 08',date:'Q3 · ADVANCE',theme:'Surgical Window',blocks:[
+   ['feet','IF INDICATED','Corrective procedure(s)','specialist-gated · $50K reserve'],
+   ['feet','WK 29–32','Post-op / intensive PT','protect the gains'],
+   ['twin','ONGOING','Recovery telemetry','every rehab session logged'],
+   ['review','WK 32','War room #05','surgical outcome audit']
+ ]},
+ {day:'MONTH 09',date:'Q3 · ADVANCE',theme:'Consolidate',blocks:[
+   ['hands','WK 33–36','Constraint-induced therapy','if candidacy confirmed'],
+   ['feet','WK 34','Custom footwear fitting','standing & transfer targets'],
+   ['conf','WK 35','First supported trip','travel as a clinical outcome'],
+   ['twin','WK 36','Twin v0.8','flags regressions before clinicians see them']
+ ]},
+ {day:'MONTH 10',date:'Q4 · SECURE',theme:'Independence',blocks:[
+   ['conf','DAILY','Daily-living skill targets','more done alone, every week'],
+   ['twin','WK 37–40','Home adaptation build-out','$20K assistive tech deployed'],
+   ['swallow','WK 38','Final swallow study','year-one objective verdict'],
+   ['review','WK 40','War room #06','launch-readiness review']
+ ]},
+ {day:'MONTH 11',date:'Q4 · SECURE',theme:'Full Re-Measure',blocks:[
+   ['assess','WK 41–44','Year-end total re-baseline','same 14+ specialties · same protocols'],
+   ['twin','WK 42','Twin v1.0 freeze','the first complete Human Digital Twin'],
+   ['hands','WK 43','Function scorecard','spoon · switch · chair · screen · type'],
+   ['conf','WK 44','Her review','she scores the year first']
+ ]},
+ {day:'MONTH 12',date:'Q4 · SECURE',theme:'Report & Launch',blocks:[
+   ['review','WK 45–46','Campaign report','every metric · before vs after'],
+   ['twin','WK 47','Platform white paper','from Patient Zero to every patient'],
+   ['twin','WK 48','Silicon Valley launch','war room opens to the world'],
+   ['review','WK 48','War room #07','Year 2 declaration: the machine front']
+ ]}
+];
+document.getElementById('calendar').innerHTML=months.map(m=>
+ `<article class="day"><div class="dayhead"><div class="dow">${m.day}</div><div class="date">${m.date}</div><div class="theme">${m.theme}</div></div><div class="blocks">${m.blocks.map(b=>`<div class="block ${b[0]}"><div class="time">${b[1]}</div><div class="title">${b[2]}</div><div class="meta">${b[3]}</div></div>`).join('')}</div></article>`
+).join('');
+</script>
+</div>
+</body>
+</html>
